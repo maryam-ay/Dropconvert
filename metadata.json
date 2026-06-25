@@ -1,0 +1,6 @@
+{
+  "name": "PNG to WebP Converter",
+  "description": "A high-performance, completely browser-local PNG to WebP bulk image converter that values your privacy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
