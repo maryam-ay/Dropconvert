@@ -394,7 +394,7 @@ export default function App() {
             </div>
             <div className="space-y-0.5">
               <h1 id="app-title" className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
-                PNG to WebP
+                DropConvert
               </h1>
               <p id="app-subtitle" className="text-[10px] font-bold text-slate-400 dark:text-neutral-500 tracking-wider uppercase">
                 Local Batch Converter
