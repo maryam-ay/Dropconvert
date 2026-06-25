@@ -120,10 +120,11 @@ export default function App() {
       const uniqueName = getUniqueFilename(file.name, existingNames);
       existingNames.add(uniqueName);
 
-      // Create WebP target filename
+      // Create WebP target filename by replacing the extension (or appending if none)
       let convertedName = uniqueName;
-      if (convertedName.toLowerCase().endsWith('.png')) {
-        convertedName = convertedName.slice(0, -4) + '.webp';
+      const lastDotIndex = convertedName.lastIndexOf('.');
+      if (lastDotIndex !== -1) {
+        convertedName = convertedName.slice(0, lastDotIndex) + '.webp';
       } else {
         convertedName = convertedName + '.webp';
       }
@@ -149,7 +150,7 @@ export default function App() {
   };
 
   // Convert individual file helper
-  const convertPngToWebp = (
+  const convertImageToWebp = (
     fileItem: ImageFile,
     currentQuality: number
   ): Promise<{ blob: Blob; url: string; size: number }> => {
@@ -160,8 +161,8 @@ export default function App() {
       img.onload = () => {
         try {
           const canvas = document.createElement('canvas');
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
+          canvas.width = img.naturalWidth || img.width || 300;
+          canvas.height = img.naturalHeight || img.height || 300;
 
           const ctx = canvas.getContext('2d');
           if (!ctx) {
@@ -172,11 +173,11 @@ export default function App() {
 
           // Render onto transparent canvas (retains transparency)
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
           canvas.toBlob(
             (blob) => {
-              // Revoke the original PNG load objectURL to free memory
+              // Revoke the original load objectURL to free memory
               URL.revokeObjectURL(objectUrl);
 
               if (blob) {
@@ -201,7 +202,7 @@ export default function App() {
 
       img.onerror = () => {
         URL.revokeObjectURL(objectUrl);
-        reject(new Error('Invalid or corrupted image format.'));
+        reject(new Error('This image format is either corrupted or not supported/decodable by your browser.'));
       };
 
       img.src = objectUrl;
@@ -245,7 +246,7 @@ export default function App() {
         );
 
         try {
-          const result = await convertPngToWebp(item, quality);
+          const result = await convertImageToWebp(item, quality);
 
           if (cancelRef.current) {
             URL.revokeObjectURL(result.url);
@@ -401,10 +402,10 @@ export default function App() {
             </div>
             <div className="space-y-0.5">
               <h1 id="app-title" className="text-xl font-bold tracking-tight text-slate-800 dark:text-white">
-                DropConvert
+                DropConvert — Convert Images to WebP
               </h1>
               <p id="app-subtitle" className="text-[10px] font-bold text-slate-400 dark:text-neutral-500 tracking-wider uppercase">
-                Local Batch Converter
+                Local Batch Image-to-WebP Converter
               </p>
             </div>
           </div>
@@ -432,6 +433,10 @@ export default function App() {
           {/* Left Column: Dropzone and Queue table */}
           <div className="flex-1 w-full space-y-6">
             <DropZone onFilesSelected={handleFilesSelected} />
+
+            <p className="text-xs text-slate-400 dark:text-neutral-500 text-center">
+              Supports most common image formats (PNG, JPG/JPEG, WebP, GIF, BMP, SVG, AVIF). Some formats depend on your browser.
+            </p>
 
             {files.length > 0 && (
               <ConversionQueue
@@ -463,7 +468,7 @@ export default function App() {
                   Settings Panel
                 </span>
                 <p className="text-xs text-slate-400 dark:text-neutral-500 leading-relaxed">
-                  Select your PNG files to unlock compression controls, bulk actions, and file download options.
+                  Select your image files to unlock compression controls, bulk actions, and file download options.
                 </p>
               </div>
             )}

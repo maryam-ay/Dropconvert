@@ -135,7 +135,7 @@ export default function QualityControl({
           </span>
         </div>
         <div className="flex justify-between font-medium">
-          <span className="text-slate-400 dark:text-neutral-500 uppercase tracking-wider text-[10px]">Total PNG Size</span>
+          <span className="text-slate-400 dark:text-neutral-500 uppercase tracking-wider text-[10px]">Original Size</span>
           <span className="text-slate-700 dark:text-neutral-300 font-mono">
             {formatBytes(totalOriginalBytes)}
           </span>

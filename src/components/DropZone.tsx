@@ -15,14 +15,16 @@ export default function DropZone({ onFilesSelected }: DropZoneProps) {
     setErrorText(null);
 
     const filesArray = Array.from(fileList);
-    const pngFiles: File[] = [];
+    const validFiles: File[] = [];
     let skippedCount = 0;
 
     filesArray.forEach((file) => {
-      // Check both MIME type and file extension
-      const isPng = file.type === 'image/png' || file.name.toLowerCase().endsWith('.png');
-      if (isPng) {
-        pngFiles.push(file);
+      // Check for image MIME type or common image extension
+      const isImage = file.type.startsWith('image/') || 
+        /\.(png|jpe?g|webp|gif|bmp|svg|avif|tiff|ico|heic)$/i.test(file.name);
+      
+      if (isImage) {
+        validFiles.push(file);
       } else {
         skippedCount++;
       }
@@ -30,14 +32,14 @@ export default function DropZone({ onFilesSelected }: DropZoneProps) {
 
     if (skippedCount > 0) {
       setErrorText(
-        `Skipped ${skippedCount} file${skippedCount > 1 ? 's' : ''} (only .PNG files are supported).`
+        `Skipped ${skippedCount} file${skippedCount > 1 ? 's' : ''} (only common image formats are supported).`
       );
       // Automatically clear warning after 5 seconds
       setTimeout(() => setErrorText(null), 6000);
     }
 
-    if (pngFiles.length > 0) {
-      onFilesSelected(pngFiles);
+    if (validFiles.length > 0) {
+      onFilesSelected(validFiles);
     }
   };
 
@@ -88,7 +90,7 @@ export default function DropZone({ onFilesSelected }: DropZoneProps) {
         }}
         tabIndex={0}
         role="button"
-        aria-label="Upload PNG files. Drag and drop PNG files here, or click to browse."
+        aria-label="Upload image files. Drag and drop images here, or click to browse."
         className={`relative flex flex-col items-center justify-center w-full p-8 text-center border border-dashed rounded-xl cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
           isDragActive
             ? 'border-indigo-500 bg-indigo-50/50 dark:border-indigo-400 dark:bg-indigo-950/20 scale-[0.995]'
@@ -100,7 +102,7 @@ export default function DropZone({ onFilesSelected }: DropZoneProps) {
           type="file"
           id="file-input-raw"
           multiple
-          accept=".png,image/png"
+          accept="image/*"
           onChange={handleInputChange}
           className="hidden"
           tabIndex={-1}
@@ -115,7 +117,7 @@ export default function DropZone({ onFilesSelected }: DropZoneProps) {
           </div>
           
           <h2 id="dropzone-prompt" className="text-lg font-semibold text-slate-700 dark:text-neutral-200">
-            Drop your PNG files here
+            Drop your images here
           </h2>
           
           <p id="dropzone-subprompt" className="text-sm text-slate-400 dark:text-neutral-400 mt-1 mb-4">

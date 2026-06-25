@@ -104,9 +104,16 @@ export default function ConversionQueue({
                           <ImageIcon className="w-4 h-4 text-slate-400 dark:text-neutral-500" />
                         )}
                       </div>
-                      <span className="font-medium text-slate-700 dark:text-neutral-200" title={item.name}>
-                        {item.name}
-                      </span>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-medium text-slate-700 dark:text-neutral-200 truncate" title={item.name}>
+                          {item.name}
+                        </span>
+                        {item.status === 'failed' && item.error && (
+                          <span className="text-[11px] text-red-500 dark:text-red-400 mt-0.5 block truncate" title={item.error}>
+                            {item.error}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </td>
 

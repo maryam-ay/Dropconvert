@@ -34,7 +34,7 @@ export default function HowItWorks() {
         <ol id="how-it-works-steps" className="space-y-2.5 text-xs text-slate-500 dark:text-neutral-400">
           <li className="flex gap-2">
             <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">1.</span>
-            <span>Drag & drop PNG files into the upload target.</span>
+            <span>Drag & drop your images into the upload target.</span>
           </li>
           <li className="flex gap-2">
             <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">2.</span>

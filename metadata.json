@@ -1,6 +1,6 @@
 {
   "name": "DropConvert",
-  "description": "A high-performance, completely browser-local PNG to WebP bulk image converter that values your privacy.",
+  "description": "A high-performance, completely browser-local bulk image-to-WebP converter that values your privacy.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
