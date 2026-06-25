@@ -108,7 +108,7 @@ export default function QualityControl({
             className="w-full py-3 bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-indigo-600 dark:text-indigo-400 hover:bg-slate-50 dark:hover:bg-neutral-850 rounded-lg font-bold text-sm shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <Download className="w-4 h-4" />
-            <span>Download ZIP ({completedCount})</span>
+            <span>{completedCount === 1 ? 'Download WebP' : `Download ZIP (${completedCount})`}</span>
           </button>
         )}
       </div>

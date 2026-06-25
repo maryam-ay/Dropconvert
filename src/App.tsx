@@ -30,18 +30,20 @@ export default function App() {
   const cancelRef = useRef<boolean>(false);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('theme');
+      const saved = localStorage.getItem('dropconvert_theme');
       if (saved === 'dark' || saved === 'light') return saved;
     }
     return 'light';
   });
 
   useEffect(() => {
-    localStorage.setItem('theme', theme);
+    localStorage.setItem('dropconvert_theme', theme);
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
     }
   }, [theme]);
 
@@ -346,10 +348,15 @@ export default function App() {
     document.body.removeChild(a);
   };
 
-  // Compile and download all completed as a single ZIP
+  // Compile and download all completed as a single ZIP or individual file
   const handleDownloadZip = async () => {
     const completedFiles = files.filter(f => f.status === 'done' && f.convertedBlob);
     if (completedFiles.length === 0) return;
+
+    if (completedFiles.length === 1) {
+      handleDownloadFile(completedFiles[0]);
+      return;
+    }
 
     const zip = new JSZip();
     completedFiles.forEach(f => {
